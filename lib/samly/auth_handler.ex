@@ -7,12 +7,42 @@ defmodule Samly.AuthHandler do
 
   import Samly.RouterUtil, only: [ensure_sp_uris_set: 2, send_saml_request: 5, redirect: 3]
 
+  # @sso_init_resp_template """
+  # <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
+  #   \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
+  # <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">
+  #   <head>
+  #     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>
+  #   </head>
+  #   <body>
+  #     <script nonce=\"<%= nonce %>\">
+  #       document.addEventListener(\"DOMContentLoaded\", function () {
+  #         document.getElementById(\"sso-req-form\").submit();
+  #       });
+  #     </script>
+  #     <noscript>
+  #       <p><strong>Note:</strong>
+  #         Since your browser does not support JavaScript, you must press
+  #         the button below to proceed.
+  #       </p>
+  #     </noscript>
+  #     <form id=\"sso-req-form\" method=\"post\" action=\"<%= action %>\">
+  #       <%= if target_url do %>
+  #       <input type=\"hidden\" name=\"target_url\" value=\"<%= target_url %>\" />
+  #       <% end %>
+  #       <input type=\"hidden\" name=\"_csrf_token\" value=\"<%= csrf_token %>\" />
+  #       <noscript><input type=\"submit\" value=\"Submit\" /></noscript>
+  #     </form>
+  #   </body>
+  # </html>
+  # """
+
   @sso_init_resp_template """
-  <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
-    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
+  <!DOCTYPE html>
   <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">
     <head>
       <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>
+      <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>
     </head>
     <body>
       <script nonce=\"<%= nonce %>\">
